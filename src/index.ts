@@ -1,7 +1,10 @@
-import axios, {AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse, CreateAxiosDefaults} from 'axios';
+import axios, {AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse, CreateAxiosDefaults, InternalAxiosRequestConfig} from 'axios';
 
 
-type Callback = () => void;
+type ShowLoaderCallback = (requestID : number, message : string) => void;
+type EnablePageInteractionCallback = (requestID : number) => void;
+type DisableCallback = (requestID : number) => void;
+type ErrorCallback = (error : AxiosError) => void;
 
 interface FactoryConfigUser
 {
@@ -23,6 +26,14 @@ declare module "axios"
 		loaderShow : boolean;
 		disablePageInteraction : boolean;
 	}
+	export interface InternalAxiosRequestConfig
+	{
+		requestID : number;
+		loaderShowAfterMs : number;
+		loaderMessage : string;
+		loaderShow : boolean;
+		disablePageInteraction : boolean;
+	}
 }
 
 
@@ -33,11 +44,11 @@ export class AxiosFactory
 	#axiosInstance : AxiosInstance;
 	#responseReceivedForRequests : Array<number> = [];
 	
-	#disablePageInteractionCallback : Callback|null = null;
-	#enablePageInteractionCallback : Callback|null = null;
-	#showLoaderCallback : Callback|null = null;
-	#hideLoaderCallback : Callback|null = null;
-	#handleResponseErrorCallback : Callback|null = null;
+	#disablePageInteractionCallback : DisableCallback|null = null;
+	#enablePageInteractionCallback : EnablePageInteractionCallback|null = null;
+	#showLoaderCallback : ShowLoaderCallback|null = null;
+	#hideLoaderCallback : DisableCallback|null = null;
+	#handleResponseErrorCallback : ErrorCallback|null = null;
 
 	constructor(axiosConfig? : CreateAxiosDefaults, factoryConfig? : FactoryConfigUser)
 	{
@@ -56,7 +67,7 @@ export class AxiosFactory
 	}
 
 
-	setPageInteractionCallbacks(disableCallback : Callback, enableCallback : Callback) : this
+	setPageInteractionCallbacks(disableCallback : DisableCallback, enableCallback : EnablePageInteractionCallback) : this
 	{
 		this.#disablePageInteractionCallback = disableCallback;
 		this.#enablePageInteractionCallback = enableCallback;
@@ -66,7 +77,7 @@ export class AxiosFactory
 		return this;
 	}
 
-	setLoaderCallbacks(showCallback : Callback, hideCallback : Callback) : this
+	setLoaderCallbacks(showCallback : ShowLoaderCallback, hideCallback : DisableCallback) : this
 	{
 		this.#showLoaderCallback = showCallback;
 		this.#hideLoaderCallback = hideCallback;
@@ -82,7 +93,7 @@ export class AxiosFactory
 		return this;
 	}
 
-	setHandleResponseErrorCallback(callback : Callback) : this
+	setHandleResponseErrorCallback(callback : ErrorCallback) : this
 	{
 		this.#handleResponseErrorCallback = callback;
 		return this;
@@ -100,7 +111,7 @@ export class AxiosFactory
 	}
 
 
-	#prepareRequest = (config : AxiosRequestConfig) => 
+	#prepareRequest = (config : InternalAxiosRequestConfig) : InternalAxiosRequestConfig => 
 	{															//cLog('AxiosFactory.#requestCounter', AxiosFactory.#requestCounter, this.#prepareRequest);
 		let requestID = ++AxiosFactory.#requestCounter;			//cLog('requestID', requestID, this.#prepareRequest);
 		config.requestID = requestID;
@@ -132,18 +143,18 @@ export class AxiosFactory
 	}
 
 
-	#handleResponse = (response : AxiosResponse) =>
+	#handleResponse = (response : AxiosResponse) : AxiosResponse =>
 	{    								//cLog('response', response, this.#handleResponse);		
 		this.#axiosRespEnd (response);
 
 		return response;
 	}
 
-	#axiosRespEnd = (response : AxiosResponse) =>
+	#axiosRespEnd = (response : AxiosResponse) : void =>
 	{
 		let requestID = response.config.requestID;
 
-		this.#responseReceivedForRequests.push(number(requestID));
+		this.#responseReceivedForRequests.push(Number(requestID));
 		
 		if (response.config.disablePageInteraction)
 		{
@@ -156,12 +167,12 @@ export class AxiosFactory
 		}
 	}
 
-	#handleRequestError = (error : AxiosError) =>
+	#handleRequestError = (error : AxiosError) : Promise<AxiosError> =>
 	{								// cLog('error', error, this.#handleRequestError);
 		return Promise.reject(error);
 	}
 
-	#handleResponseError = (error : AxiosError) => 
+	#handleResponseError = (error : AxiosError) : Promise<unknown> => 
 	{								//cLog('error', error, this.#handleResponseError);				
 		if (error.response)  
 		{
