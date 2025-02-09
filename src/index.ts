@@ -61,7 +61,6 @@ export class AxiosFactory
 
 		this.#axiosInstance.interceptors.request.use(this.#prepareRequest, this.#handleRequestError);
 		this.#axiosInstance.interceptors.response.use(this.#handleResponse, this.#handleResponseError);
-		// cLog('this.#axiosInstance', this.#axiosInstance);
 	}
 
 	setLoaderCallbacks(showCallback : ShowLoaderCallback, hideCallback : HideLoaderCallback) : this
@@ -70,7 +69,6 @@ export class AxiosFactory
 		this.#hideLoaderCallback = hideCallback;
 		this.#axiosInstance.defaults.loaderShow = true;
 
-		// cLog('this.#axiosInstance', this.#axiosInstance, this.setLoaderCallbacks);
 		return this;
 	}
 
@@ -99,8 +97,8 @@ export class AxiosFactory
 
 
 	#prepareRequest = (config : InternalAxiosRequestConfig) : InternalAxiosRequestConfig => 
-	{															//cLog('AxiosFactory.#requestCounter', AxiosFactory.#requestCounter, this.#prepareRequest);
-		let requestID = ++AxiosFactory.#requestCounter;			//cLog('requestID', requestID, this.#prepareRequest);
+	{
+		let requestID = ++AxiosFactory.#requestCounter;
 		config.requestID = requestID;
 		
 		if (config.disablePageInteraction) {pageInteractionDisable();}    
@@ -110,7 +108,7 @@ export class AxiosFactory
 			var intervalTakesLong = setInterval( () =>
 			{	
 				if (this.#responseReceivedForRequests.includes(requestID)) // Response was already received 
-				{											//cLog('učena rychle -> grafika o práci systému se nezobrazí', fceTrvaDlouho);
+				{
 					clearInterval(intervalTakesLong); 
 					return;
 				}
@@ -122,13 +120,12 @@ export class AxiosFactory
 			config.loaderShowAfterMs);
 		}
 		
-		// cLog('END :: config', config, this.#prepareRequest);
 		return config;
 	}
 
 
 	#handleResponse = (response : AxiosResponse) : AxiosResponse =>
-	{    								//cLog('response', response, this.#handleResponse);		
+	{
 		this.#axiosRespEnd (response);
 
 		return response;
@@ -149,12 +146,12 @@ export class AxiosFactory
 	}
 
 	#handleRequestError = (error : AxiosError) : Promise<AxiosError> =>
-	{								// cLog('error', error, this.#handleRequestError);
+	{
 		return Promise.reject(error);
 	}
 
 	#handleResponseError = (error : AxiosError) : Promise<unknown> => 
-	{								//cLog('error', error, this.#handleResponseError);				
+	{
 		if (error.response)  
 		{
 			this.#axiosRespEnd (error.response);
