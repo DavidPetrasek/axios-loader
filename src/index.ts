@@ -6,13 +6,13 @@ type ShowLoaderCallback = (requestID : number, message : string) => void;
 type HideLoaderCallback = (requestID : number) => void;
 type ErrorCallback = (error : AxiosError) => void;
 
-interface FactoryConfigUser
+interface LoaderConfigUser
 {
 	loaderShowAfterMs : number;
 	loaderMessage : string;
 	disablePageInteraction : boolean;
 }
-interface FactoryConfig extends FactoryConfigUser
+interface LoaderConfig extends LoaderConfigUser
 {
 	loaderShow : boolean;
 }
@@ -37,7 +37,7 @@ declare module "axios"
 }
 
 
-export class AxiosFactory 
+export class AxiosLoader 
 {
 	static #requestCounter : number = 0;
 	
@@ -46,47 +46,35 @@ export class AxiosFactory
 	
 	#showLoaderCallback : ShowLoaderCallback|null = null;
 	#hideLoaderCallback : HideLoaderCallback|null = null;
-	#handleResponseErrorCallback : ErrorCallback|null = null;
+	#responseErrorCallback : ErrorCallback|null = null;
 
-	constructor(axiosConfig? : CreateAxiosDefaults, factoryConfigUser? : FactoryConfigUser)
+	constructor(axiosConfig? : CreateAxiosDefaults, loaderConfigUser? : LoaderConfigUser)
 	{
-		let factoryConfig : FactoryConfig = 
+		let loaderConfig : LoaderConfig = 
 		{
 			loaderShow: false,
-			disablePageInteraction: factoryConfigUser?.disablePageInteraction ?? true,
-			loaderShowAfterMs: factoryConfigUser?.loaderShowAfterMs ?? 200,
-			loaderMessage: factoryConfigUser?.loaderMessage ?? '',
+			disablePageInteraction: loaderConfigUser?.disablePageInteraction ?? true,
+			loaderShowAfterMs: loaderConfigUser?.loaderShowAfterMs ?? 200,
+			loaderMessage: loaderConfigUser?.loaderMessage ?? 'Please wait ...',
 		};
-		this.#axiosInstance = axios.create({...axiosConfig, ...factoryConfig});
+		this.#axiosInstance = axios.create({...axiosConfig, ...loaderConfig});
 
 		this.#axiosInstance.interceptors.request.use(this.#prepareRequest, this.#handleRequestError);
 		this.#axiosInstance.interceptors.response.use(this.#handleResponse, this.#handleResponseError);
 	}
 
-	setLoaderCallbacks(showCallback : ShowLoaderCallback, hideCallback : HideLoaderCallback) : this
+	setLoaderCallbacks(showLoaderCallback : ShowLoaderCallback, hideLoaderCallback : HideLoaderCallback) : this
 	{
-		this.#showLoaderCallback = showCallback;
-		this.#hideLoaderCallback = hideCallback;
+		this.#showLoaderCallback = showLoaderCallback;
+		this.#hideLoaderCallback = hideLoaderCallback;
 		this.#axiosInstance.defaults.loaderShow = true;
 
 		return this;
 	}
 
-	setLoaderShowAfterMs(ms : number) : this
+	setResponseErrorCallback(responseErrorCallback : ErrorCallback) : this
 	{
-		this.#axiosInstance.defaults.loaderShowAfterMs = ms;
-		return this;
-	}
-
-	setHandleResponseErrorCallback(callback : ErrorCallback) : this
-	{
-		this.#handleResponseErrorCallback = callback;
-		return this;
-	}
-
-	setLoaderMessage(message : string) : this
-	{
-		this.#axiosInstance.defaults.loaderMessage = message;
+		this.#responseErrorCallback = responseErrorCallback;
 		return this;
 	}
 
@@ -98,7 +86,7 @@ export class AxiosFactory
 
 	#prepareRequest = (config : InternalAxiosRequestConfig) : InternalAxiosRequestConfig => 
 	{
-		let requestID = ++AxiosFactory.#requestCounter;
+		let requestID = ++AxiosLoader.#requestCounter;
 		config.requestID = requestID;
 		
 		if (config.disablePageInteraction) {pageInteractionDisable();}    
@@ -155,7 +143,7 @@ export class AxiosFactory
 		if (error.response)  
 		{
 			this.#axiosRespEnd (error.response);
-			this.#handleResponseErrorCallback?.(error);
+			this.#responseErrorCallback?.(error);
 		}
 		else if (error)
 		{

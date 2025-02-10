@@ -1,7 +1,7 @@
 {
-  "name": "@dpsys/axios-factory",
+  "name": "@dpsys/axios-loader",
   "version": "0.0.1",
-  "description": "Create Axios instances with ease",
+  "description": "Axios loader management made easy",
   
   "main": "./src/index.ts",
   "scripts": {
