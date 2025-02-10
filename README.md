@@ -18,6 +18,7 @@ npm i @dpsys/axios-loader
 ```
 
 ## Example Usage
+**1. Make AxiosLoader instance:**
 ```js
 import { AxiosLoader } from '@dpsys/axios-loader';
 
@@ -45,11 +46,12 @@ let axiosLoaderInstance = new AxiosLoader
 	console.log(error);
 });
 
-export const axiosLoader = axiosLoaderInstance.getAxiosInstance();	// --> Use in your app
-// export default axiosLoaderInstance.getAxiosInstance();			   --> Use in your app
+export const axiosLoader = axiosLoaderInstance.getAxiosInstance();
+// export default axiosLoaderInstance.getAxiosInstance();
 ```
 
-### Loader config can be overriden at any time
+**2. Use it in your app**
+- Loader config can be overriden here
 ```js
 import {axiosLoader} from '../lib/axios/default';
 
