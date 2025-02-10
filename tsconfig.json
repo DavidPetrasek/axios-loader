@@ -12,7 +12,6 @@
     // "module": "Node16",
     "moduleResolution": "node",
     "target": "ES2022",
-    "outDir": "./dist",
 
     /* Strictness */
     "strict": true,
