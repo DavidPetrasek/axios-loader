@@ -1,16 +1,17 @@
 {
   "name": "@dpsys/axios-loader",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Axios loader management made easy",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/DavidPetrasek/axios-loader"
+    "url": "git+https://github.com/DavidPetrasek/axios-loader.git"
   },
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
-  "files": ["dist"],
-
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "test": "vitest --ui",
     "build": "tsup"

@@ -14,14 +14,15 @@ Axios wrapper for easy loader management.
 ## Installation
 
 ```bash
-npm install ...
+npm i @dpsys/axios-loader
 ```
 
 ## Example Usage
 ```js
-import { AxiosLoader } from '...';
+import { AxiosLoader } from '@dpsys/axios-loader';
 
-let axiosLoaderDefault = new AxiosLoader(
+let axiosLoaderInstance = new AxiosLoader
+(
 	// Axios config
 	{
 		baseURL: 'https://test.com',
@@ -30,7 +31,8 @@ let axiosLoaderDefault = new AxiosLoader(
 	{
 		loaderShowAfterMs: 300, 
 		loaderMessage: 'Loading ...'
-	})
+	}
+)
 .setLoaderCallbacks
 (
 	// showLoaderCallback
@@ -43,15 +45,15 @@ let axiosLoaderDefault = new AxiosLoader(
 	console.log(error);
 });
 
-export const axiosDefault = axiosLoaderDefault.getAxiosInstance();	// --> Use in your app
-// export default axiosLoaderDefault.getAxiosInstance();			   --> Use in your app
+export const axiosLoader = axiosLoaderInstance.getAxiosInstance();	// --> Use in your app
+// export default axiosLoaderInstance.getAxiosInstance();			   --> Use in your app
 ```
 
 ### Loader config can be overriden at any time
 ```js
-import {axiosDefault} from '../lib/axios/default';
+import {axiosLoader} from '../lib/axios/default';
 
-axiosDefault.post('/some-route', {data: 'foo'}, {loaderMessage: 'Different loader message...', disablePageInteraction: false, loaderShow: false});
+axiosLoader.post('/some-route', {data: 'foo'}, {loaderMessage: 'Different loader message...', disablePageInteraction: false, loaderShow: false});
 .then( async (response) =>
 {
 	...
