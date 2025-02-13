@@ -5,6 +5,8 @@
 
 Axios wrapper for easy loader management.
 
+Supports CJS, ESM and TypeScript.
+
 ## Features
 
 - **Factory Pattern Configuration** - Create pre-configured Axios instances
@@ -18,7 +20,7 @@ npm i @dpsys/axios-loader
 ```
 
 ## Example Usage
-**1. Make AxiosLoader instance:**
+**1. Make your AxiosLoader instance:**
 ```js
 import { AxiosLoader } from '@dpsys/axios-loader';
 
