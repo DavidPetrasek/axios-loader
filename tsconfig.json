@@ -9,8 +9,8 @@
     // "checkJs": false,
     "resolveJsonModule": true,
     "moduleDetection": "force",
-    // "module": "Node16",
-    "moduleResolution": "node",
+    "module": "NodeNext",
+    "moduleResolution": "nodenext",
     "target": "ES2022",
 
     /* Strictness */
