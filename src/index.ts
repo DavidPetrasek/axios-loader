@@ -133,7 +133,7 @@ export class AxiosLoader
 		
 		if (resp.config.loaderShow)
 		{	
-			if (resp.config.loaderNeverHide) {this.#hideLoaderCallback?.(requestID);}
+			if (!resp.config.loaderNeverHide) {this.#hideLoaderCallback?.(requestID);}
 		}
 	}
 
