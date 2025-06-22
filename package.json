@@ -1,6 +1,6 @@
 {
   "name": "@dpsys/axios-loader",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Axios loader management made easy",
   "author": "David Petrásek",
   "license": "ISC",
@@ -9,7 +9,6 @@
     "url": "git+https://github.com/DavidPetrasek/axios-loader.git"
   },
   "bugs": "https://github.com/DavidPetrasek/axios-loader/issues",
-
   "exports": {
     ".": {
       "import": {
@@ -22,7 +21,6 @@
       }
     }
   },
-
   "files": [
     "dist"
   ],
@@ -30,7 +28,6 @@
     "test": "vitest --ui",
     "build": "tsup"
   },
-  
   "devDependencies": {
     "@vitest/ui": "^3.0.5",
     "tsup": "^8.3.6",
