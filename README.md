@@ -71,6 +71,7 @@ axiosLoader.post('/some-route', {data: 'foo'}, {loaderMessage: 'Different loader
 | `loaderShow`             | boolean | `false`           | Whether to show the loader. Is automatically enabled after setting callbacks via `setLoaderCallbacks`. |
 | `loaderShowAfterMs`      | number  | `200`             | Delay in milliseconds before the loader appears.                            |
 | `loaderMessage`          | string  | `Please wait ...` | Message displayed in the loader.                                             |
+| `loaderNeverHide`        | boolean | `false`           | If true, loader is never removed after request has finished. |
 | `disablePageInteraction` | boolean | `true`            | Whether to prevent user page interaction during each request.                |
 
 ## Callbacks

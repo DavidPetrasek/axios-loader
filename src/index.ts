@@ -11,6 +11,7 @@ interface LoaderConfigUser
 	loaderShowAfterMs : number;
 	loaderMessage : string;
 	disablePageInteraction : boolean;
+    loaderNeverHide : boolean;
 }
 interface LoaderConfig extends LoaderConfigUser
 {
@@ -25,6 +26,7 @@ declare module "axios"
 		loaderMessage : string;
 		loaderShow : boolean;
 		disablePageInteraction : boolean;
+        loaderNeverHide : boolean;
 	}
 	export interface InternalAxiosRequestConfig
 	{
@@ -33,6 +35,7 @@ declare module "axios"
 		loaderMessage : string;
 		loaderShow : boolean;
 		disablePageInteraction : boolean;
+        loaderNeverHide : boolean;
 	}
 }
 
@@ -56,6 +59,7 @@ export class AxiosLoader
 			disablePageInteraction: loaderConfigUser?.disablePageInteraction ?? true,
 			loaderShowAfterMs: loaderConfigUser?.loaderShowAfterMs ?? 200,
 			loaderMessage: loaderConfigUser?.loaderMessage ?? 'Please wait ...',
+            loaderNeverHide: loaderConfigUser?.loaderNeverHide ?? false,
 		};
 		this.#axiosInstance = axios.create({...axiosConfig, ...loaderConfig});
 
@@ -119,17 +123,17 @@ export class AxiosLoader
 		return response;
 	}
 
-	#axiosRespEnd = (response : AxiosResponse) : void =>
+	#axiosRespEnd = (resp : AxiosResponse) : void =>
 	{
-		let requestID = response.config.requestID;
+		let requestID = resp.config.requestID;
 
 		this.#responseReceivedForRequests.push(Number(requestID));
 		
-		if (response.config.disablePageInteraction) {pageInteractionEnable();}
+		if (resp.config.disablePageInteraction) {pageInteractionEnable();}
 		
-		if (response.config.loaderShow)
+		if (resp.config.loaderShow)
 		{	
-			this.#hideLoaderCallback?.(requestID);
+			if (resp.config.loaderNeverHide) {this.#hideLoaderCallback?.(requestID);}
 		}
 	}
 
@@ -142,7 +146,7 @@ export class AxiosLoader
 	{
 		if (error.response)  
 		{
-			this.#axiosRespEnd (error.response);
+			this.#axiosRespEnd(error.response);
 			this.#responseErrorCallback?.(error);
 		}
 		else if (error)
