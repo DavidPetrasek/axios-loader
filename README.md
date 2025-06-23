@@ -1,11 +1,11 @@
-# Axios Loader
-
-[![ISC License](https://img.shields.io/badge/License-ISC-blue.svg)](https://opensource.org/licenses/ISC)
 [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](https://www.typescriptlang.org/)
+[![ISC License](https://img.shields.io/badge/License-ISC-blue.svg)](https://opensource.org/licenses/ISC)
+
+# Axios Loader
 
 Axios wrapper for easy loader management.
 
-Supports CJS, ESM and TypeScript.
+Supports CJS and ESM.
 
 ## Features
 
@@ -57,7 +57,7 @@ export const axiosLoader = axiosLoaderInstance.getAxiosInstance();
 ```js
 import {axiosLoader} from '../lib/axios/default';
 
-axiosLoader.post('/some-route', {data: 'foo'}, {loaderMessage: 'Different loader message...', disablePageInteraction: false, loaderShow: false});
+axiosLoader.post('/some-route', {data: 'foo'}, {loaderMessage: 'Different loader message...', disablePageInteraction: false});
 .then( async (response) =>
 {
 	...
