@@ -51,9 +51,11 @@ export class AxiosLoader
 	#hideLoaderCallback : HideLoaderCallback|null = null;
 	#responseErrorCallback : ErrorCallback|null = null;
 
-	constructor(axiosConfig? : CreateAxiosDefaults, loaderConfigUser? : LoaderConfigUser)
-	{
-		let loaderConfig : LoaderConfig = 
+	constructor(axiosInstance: AxiosInstance, loaderConfigUser?: LoaderConfigUser);
+	constructor(axiosConfig?: CreateAxiosDefaults, loaderConfigUser?: LoaderConfigUser);
+	constructor(axiosOrConfig?: AxiosInstance | CreateAxiosDefaults, loaderConfigUser?: LoaderConfigUser) 
+    {
+		let loaderConfig: LoaderConfig = 
 		{
 			loaderShow: false,
 			disablePageInteraction: loaderConfigUser?.disablePageInteraction ?? true,
@@ -61,7 +63,19 @@ export class AxiosLoader
 			loaderMessage: loaderConfigUser?.loaderMessage ?? 'Please wait ...',
             loaderNeverHide: loaderConfigUser?.loaderNeverHide ?? false,
 		};
-		this.#axiosInstance = axios.create({...axiosConfig, ...loaderConfig});
+
+		// Check if an existing AxiosInstance was passed
+		if (axiosOrConfig && 'interceptors' in axiosOrConfig) 
+        {
+			this.#axiosInstance = axiosOrConfig;
+			// Merge loader config into the existing instance's defaults
+			this.#axiosInstance.defaults = { ...this.#axiosInstance.defaults, ...loaderConfig };
+		} 
+        else 
+        {
+			// Create a new instance with config and loader defaults
+			this.#axiosInstance = axios.create({ ...(axiosOrConfig as CreateAxiosDefaults), ...loaderConfig });
+		}
 
 		this.#axiosInstance.interceptors.request.use(this.#prepareRequest, this.#handleRequestError);
 		this.#axiosInstance.interceptors.response.use(this.#handleResponse, this.#handleResponseError);

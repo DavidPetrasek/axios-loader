@@ -3,15 +3,15 @@
 
 # Axios Loader
 
-Axios wrapper for easy loader management.
+Add custom spinners, popups, or loading indicators to improve user experience during Axios requests.
 
 Supports CJS and ESM.
 
 ## Features
 
-- **Factory Pattern Configuration** - Create pre-configured Axios instances
 - **Loader Management** - Automatically show/hide custom loaders
 - **Page Interaction Control** - Disable UI interactions during requests
+- **Factory Pattern Configuration**
 
 ## Installation
 
@@ -20,13 +20,13 @@ npm i @dpsys/axios-loader
 ```
 
 ## Example Usage
-**1. Make your AxiosLoader instance:**
+**1. Make (or update existing) Axios instance:**
 ```js
 import { AxiosLoader } from '@dpsys/axios-loader';
 
 let axiosLoaderInstance = new AxiosLoader
 (
-	// Axios config
+	// Axios config or an existing Axios instance
 	{
 		baseURL: 'https://test.com',
 	},
