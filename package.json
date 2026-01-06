@@ -1,6 +1,6 @@
 {
   "name": "@dpsys/axios-loader",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Axios loader management made easy",
   "author": "David Petrásek",
   "license": "ISC",
