@@ -49,7 +49,6 @@ export class AxiosLoader
 	
 	#showLoaderCallback : ShowLoaderCallback|null = null;
 	#hideLoaderCallback : HideLoaderCallback|null = null;
-	#responseErrorCallback : ErrorCallback|null = null;
 
 	constructor(axiosInstance: AxiosInstance, loaderConfigUser?: LoaderConfigUser);
 	constructor(axiosConfig?: CreateAxiosDefaults, loaderConfigUser?: LoaderConfigUser);
@@ -87,12 +86,6 @@ export class AxiosLoader
 		this.#hideLoaderCallback = hideLoaderCallback;
 		this.#axiosInstance.defaults.loaderShow = true;
 
-		return this;
-	}
-
-	setResponseErrorCallback(responseErrorCallback : ErrorCallback) : this
-	{
-		this.#responseErrorCallback = responseErrorCallback;
 		return this;
 	}
 
@@ -161,11 +154,6 @@ export class AxiosLoader
 		if (error.response)  
 		{
 			this.#axiosRespEnd(error.response);
-			this.#responseErrorCallback?.(error);
-		}
-		else if (error)
-		{
-			console.error('error:', error);
 		}
 
 		return Promise.reject();
