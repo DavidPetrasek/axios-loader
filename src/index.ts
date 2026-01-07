@@ -92,6 +92,8 @@ export class AxiosLoader
 
 	setResponseErrorCallback(responseErrorCallback : ErrorCallback) : this
 	{
+        console.warn('[AxiosLoader] ⚠️ setResponseErrorCallback() is deprecated and will be removed in the next minor release v1.1. Handle any errors yourself using Axios interceptors');
+
 		this.#responseErrorCallback = responseErrorCallback;
 		return this;
 	}
@@ -162,10 +164,6 @@ export class AxiosLoader
 		{
 			this.#axiosRespEnd(error.response);
 			this.#responseErrorCallback?.(error);
-		}
-		else if (error)
-		{
-			console.error('error:', error);
 		}
 
 		return Promise.reject();

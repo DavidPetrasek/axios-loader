@@ -42,11 +42,7 @@ let axiosLoaderInstance = new AxiosLoader
     (requestID, loaderMessage) => console.log(`Showing loader ${requestID} with message: ${loaderMessage}`),
 	// hideLoaderCallback
     (requestID) => console.log(`Hiding loader ${requestID}`)
-)
-.setResponseErrorCallback((error) =>
-{
-	console.log(error);
-});
+);
 
 export const axiosLoader = axiosLoaderInstance.getAxiosInstance();
 // export default axiosLoaderInstance.getAxiosInstance();
@@ -77,8 +73,6 @@ axiosLoader.post('/some-route', {data: 'foo'}, {loaderMessage: 'Different loader
 ## Callbacks
 - `showLoaderCallback(requestID: number, message: string)`: Implement this callback to show your loader.
 - `hideLoaderCallback(requestID: number)`: Implement this callback to hide your loader.
-- `responseErrorCallback(error: AxiosError)`: Implement this callback to handle Axios errors.
 
 ## Methods
-- `setLoaderCallbacks(showLoaderCallback, hideLoaderCallback)`: see Callbacks section 
-- `setResponseErrorCallback(responseErrorCallback)`: see Callbacks section
+- `setLoaderCallbacks(showLoaderCallback, hideLoaderCallback)`: see Callbacks section
