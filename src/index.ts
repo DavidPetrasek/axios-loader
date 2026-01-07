@@ -51,17 +51,17 @@ export class AxiosLoader
 	#hideLoaderCallback : HideLoaderCallback|null = null;
 	#responseErrorCallback : ErrorCallback|null = null;
 
-	constructor(axiosInstance: AxiosInstance, loaderConfigUser?: LoaderConfigUser);
-	constructor(axiosConfig?: CreateAxiosDefaults, loaderConfigUser?: LoaderConfigUser);
-	constructor(axiosOrConfig?: AxiosInstance | CreateAxiosDefaults, loaderConfigUser?: LoaderConfigUser) 
+	constructor(axiosInstance: AxiosInstance, loaderConfig?: LoaderConfigUser);
+	constructor(axiosConfig?: CreateAxiosDefaults, loaderConfig?: LoaderConfigUser);
+	constructor(axiosOrConfig?: AxiosInstance | CreateAxiosDefaults, loaderConfig?: LoaderConfigUser) 
     {
-		let loaderConfig: LoaderConfig = 
+		let loaderConfigFinal: LoaderConfig = 
 		{
 			loaderShow: false,
-			disablePageInteraction: loaderConfigUser?.disablePageInteraction ?? true,
-			loaderShowAfterMs: loaderConfigUser?.loaderShowAfterMs ?? 200,
-			loaderMessage: loaderConfigUser?.loaderMessage ?? 'Please wait ...',
-            loaderNeverHide: loaderConfigUser?.loaderNeverHide ?? false,
+			disablePageInteraction: loaderConfig?.disablePageInteraction ?? true,
+			loaderShowAfterMs: loaderConfig?.loaderShowAfterMs ?? 200,
+			loaderMessage: loaderConfig?.loaderMessage ?? 'Please wait ...',
+            loaderNeverHide: loaderConfig?.loaderNeverHide ?? false,
 		};
 
 		// Check if an existing AxiosInstance was passed
@@ -69,12 +69,12 @@ export class AxiosLoader
         {
 			this.#axiosInstance = axiosOrConfig;
 			// Merge loader config into the existing instance's defaults
-			this.#axiosInstance.defaults = { ...this.#axiosInstance.defaults, ...loaderConfig };
+			this.#axiosInstance.defaults = { ...this.#axiosInstance.defaults, ...loaderConfigFinal };
 		} 
         else 
         {
 			// Create a new instance with config and loader defaults
-			this.#axiosInstance = axios.create({ ...(axiosOrConfig as CreateAxiosDefaults), ...loaderConfig });
+			this.#axiosInstance = axios.create({ ...(axiosOrConfig as CreateAxiosDefaults), ...loaderConfigFinal });
 		}
 
 		this.#axiosInstance.interceptors.request.use(this.#prepareRequest, this.#handleRequestError);
