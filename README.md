@@ -1,3 +1,4 @@
+![NPM Downloads](https://img.shields.io/npm/dm/%40dpsys%2Faxios-loader)
 [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](https://www.typescriptlang.org/)
 [![ISC License](https://img.shields.io/badge/License-ISC-blue.svg)](https://opensource.org/licenses/ISC)
 
