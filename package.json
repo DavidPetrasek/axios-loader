@@ -1,7 +1,13 @@
 {
   "name": "@dpsys/axios-loader",
   "version": "1.0.7",
-  "description": "Axios loader management made easy",
+  "description": "Add loading indicators to Axios requests",
+  "keywords": [
+    "axios",
+    "loading-indicator",
+    "loading-screen",
+    "loading-spinner"
+  ],
   "author": "David Petrásek",
   "license": "ISC",
   "repository": {
