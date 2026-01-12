@@ -1,6 +1,6 @@
 {
   "name": "@dpsys/axios-loader",
-  "version": "1.0.7",
+  "version": "1.1.0",
   "description": "Add loading indicators to Axios requests",
   "keywords": [
     "axios",
