@@ -2,6 +2,12 @@
   "name": "@dpsys/axios-loader",
   "version": "1.0.8",
   "description": "Axios loader management made easy",
+  "keywords": [
+    "axios",
+    "loading-indicator",
+    "loading-screen",
+    "loading-spinner"
+  ],
   "author": "David Petrásek",
   "license": "ISC",
   "repository": {
