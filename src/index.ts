@@ -156,6 +156,6 @@ export class AxiosLoader
 			this.#axiosRespEnd(error.response);
 		}
 
-		return Promise.reject();
+		return Promise.reject(error);
 	}
 }
