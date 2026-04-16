@@ -166,6 +166,6 @@ export class AxiosLoader
 			this.#responseErrorCallback?.(error);
 		}
 
-		return Promise.reject();
+		return Promise.reject(error);
 	}
 }
