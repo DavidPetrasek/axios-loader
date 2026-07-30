@@ -100,23 +100,23 @@ export class AxiosLoader
 		let requestID = ++AxiosLoader.#requestCounter;
 		config.requestID = requestID;
 		
-		if (config.disablePageInteraction) {pageInteractionDisable();}    
+        // Use request-specific config, otherwise use instance (global) config, because Axios does not merge custom defaults into request config.
+        const loaderShow = config.loaderShow ?? this.#axiosInstance.defaults.loaderShow;
+        const loaderMessage = config.loaderMessage ?? this.#axiosInstance.defaults.loaderMessage;
+        const loaderShowAfterMs = config.loaderShowAfterMs ?? this.#axiosInstance.defaults.loaderShowAfterMs;
+        const disablePageInteraction = config.disablePageInteraction ?? this.#axiosInstance.defaults.disablePageInteraction;
+
+		if (disablePageInteraction) {pageInteractionDisable();}    
 		
-		if (config.loaderShow)
-		{												
-			var intervalTakesLong = setInterval( () =>
-			{	
-				if (this.#responseReceivedForRequests.includes(requestID)) // Response was already received 
-				{
-					clearInterval(intervalTakesLong); 
-					return;
-				}
-
-				this.#showLoaderCallback?.(requestID, config.loaderMessage);
-
-				clearInterval(intervalTakesLong);
-			}, 
-			config.loaderShowAfterMs);
+		if (loaderShow)
+		{
+            setTimeout(() =>
+            {
+                if (!this.#responseReceivedForRequests.includes(requestID)) // Response not received yet
+                {
+                    this.#showLoaderCallback?.(requestID, loaderMessage);
+                }
+            }, loaderShowAfterMs);
 		}
 		
 		return config;
@@ -133,14 +133,18 @@ export class AxiosLoader
 	#axiosRespEnd = (resp : AxiosResponse) : void =>
 	{
 		let requestID = resp.config.requestID;
+        this.#responseReceivedForRequests.push(Number(requestID));
 
-		this.#responseReceivedForRequests.push(Number(requestID));
+        // Use request-specific config, otherwise use instance (global) config, because Axios does not merge custom defaults into request config.
+        const loaderShow = resp.config.loaderShow ?? this.#axiosInstance.defaults.loaderShow;
+        const loaderNeverHide = resp.config.loaderNeverHide ?? this.#axiosInstance.defaults.loaderNeverHide;
+        const disablePageInteraction = resp.config.disablePageInteraction ?? this.#axiosInstance.defaults.disablePageInteraction;
 		
-		if (resp.config.disablePageInteraction) {pageInteractionEnable();}
+		if (disablePageInteraction) {pageInteractionEnable();}
 		
-		if (resp.config.loaderShow)
+		if (loaderShow)
 		{	
-			if (!resp.config.loaderNeverHide) {this.#hideLoaderCallback?.(requestID);}
+			if (!loaderNeverHide) {this.#hideLoaderCallback?.(requestID);}
 		}
 	}
 

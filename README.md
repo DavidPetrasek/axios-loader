@@ -76,4 +76,4 @@ axiosLoader.post('/some-route', {data: 'foo'}, {loaderMessage: 'Different loader
 - `hideLoaderCallback(requestID: number)`: Implement this callback to hide your loader.
 
 ## Methods
-- `setLoaderCallbacks(showLoaderCallback, hideLoaderCallback)`: see Callbacks section 
+- `setLoaderCallbacks(showLoaderCallback, hideLoaderCallback)`: see Callbacks section
