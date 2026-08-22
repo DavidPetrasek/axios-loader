@@ -5,13 +5,12 @@
     "isolatedModules": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
-    // "allowJs": true,
-    // "checkJs": false,
     "resolveJsonModule": true,
     "moduleDetection": "force",
     "module": "NodeNext",
     "moduleResolution": "nodenext",
     "target": "ES2022",
+    "ignoreDeprecations": "6.0",
 
     /* Strictness */
     "strict": true,
@@ -19,6 +18,6 @@
     "noImplicitOverride": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
-    "strictFunctionTypes": true,
+    "strictFunctionTypes": true
   }
 }
