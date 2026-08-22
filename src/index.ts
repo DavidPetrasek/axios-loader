@@ -4,7 +4,6 @@ import { pageInteractionDisable, pageInteractionEnable } from './util';
 
 type ShowLoaderCallback = (requestID : number, message : string) => void;
 type HideLoaderCallback = (requestID : number) => void;
-type ErrorCallback = (error : AxiosError) => void;
 
 interface LoaderConfigUser
 {

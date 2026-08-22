@@ -55,7 +55,7 @@ export const axiosLoader = axiosLoaderInstance.getAxiosInstance();
 import {axiosLoader} from '../lib/axios/default';
 
 axiosLoader.post('/some-route', {data: 'foo'}, {loaderMessage: 'Different loader message...', disablePageInteraction: false});
-.then( async (response) =>
+.then( (response) =>
 {
 	...
 });
